@@ -5,7 +5,7 @@
 #
 module.exports = (robot) ->
   # Load|create a kill file (array of filter regex patterns).
-  robot.brain.data.killfile = {
+  robot.brain.data.killfile ?= {
     enabled: true,
     entries: [
       {
@@ -16,24 +16,8 @@ module.exports = (robot) ->
     ]
   }
 
-  # Reset to defaults.
-  reset_defaults = () ->
-    @robot.brain.data.killfile = {
-      enabled: true,
-      entries: [
-        {
-          author: '@xurizaemon',
-          pattern: 'GET .* FRIENDS',
-          since: '2017-03-09',
-        }
-      ]
-    }
-
   restore_killing = (status) ->
-    @robot.logger.info 'restore'
-    @robot.logger.info status
     @robot.brain.data.killfile.enabled = status
-    @robot.logger.info @robot.brain.data.killfile
 
   # Ensure killfile is disabled for 1s so we can output replies
   # which contain killfile entries ... like showing the killfile!
@@ -42,26 +26,31 @@ module.exports = (robot) ->
       setTimeout (@robot) ->
         restore_killing true
       , 1000
-    @robot.brain.data.killfile.enabled = false
+      @robot.brain.data.killfile.enabled = false
 
   # Add an item to killfile.
   # @hubot kill: GET .* FRIENDS
   robot.respond /kill: (.*)/i, (res) ->
     pause_killing()
-    if res.match[1]
-      res.match[1] = res.match[1].trim()
-      robot.brain.data.killfile.entries.push {
-        author: '@someone',
-        pattern: res.match[1],
-        since: '2017-03-09'
-      }
-      res.reply "OK, I will not say things matching /#{res.match[1]}/."
+    res.match[1] = res.match[1]?.trim()
+    # Do not add empty entries.
+    return if !res.match[1]
+    # Do not duplicate entries.
+    for entry, index in robot.brain.data.killfile.entries
+      if entry.pattern == res.match[1]
+        res.reply "That's already in the killfile!"
+        return
+    robot.brain.data.killfile.entries.push {
+      author: res.envelope.user.name,
+      pattern: res.match[1],
+      since: new Date().toISOString()
+    }
+    res.reply "OK #{res.envelope.user.name}, I will not say things matching /#{res.match[1]}/."
 
   # Show the current killfile.
   # @hubot show killfile
   robot.respond /show killfile/, (res) ->
     pause_killing()
-    robot.logger.info robot.brain.data.killfile
     message = 'Current killfile:\n'
     for value, index in robot.brain.data.killfile.entries
       message += "#{index}: /#{value.pattern}/ (by #{value.author})\n"
@@ -69,11 +58,12 @@ module.exports = (robot) ->
 
   # Remove an item from the killfile.
   # @hubot delete kill 3
-  robot.respond /delete kill ([d]+)/, (res) ->
+  robot.respond /delete kill (.*)/, (res) ->
     pause_killing()
-    if robot.brain.data.killfile[d]?
-      robot.brain.data.killfile.splice(res.match[1], 1)
-    res.reply 'Removed entry #{res.match[1]}.'
+    if robot.brain.data.killfile.entries[res.match[1]]?
+      entry = robot.brain.data.killfile.entries[res.match[1]]
+      robot.brain.data.killfile.entries.splice(res.match[1], 1)
+      res.reply "Removed entry #{res.match[1]}: #{entry.pattern}."
 
   # Activate/deactivate killfile.
   # @hubot killfile on|off
@@ -86,17 +76,10 @@ module.exports = (robot) ->
 
   # Intercept things @hubot ought not to say.
   robot.responseMiddleware (context, next, done) ->
-    # reset_defaults
-    robot.logger.info "enabled: #{robot.brain.data.killfile.enabled}"
-    robot.logger.info "entries: #{robot.brain.data.killfile.entries}"
-
-    # robot.logger.info context
     return unless context.plaintext?
     for string in context.strings
       if robot.brain.data.killfile.enabled
         for entry in robot.brain.data.killfile.entries
-          robot.logger.info JSON.stringify(entry.pattern)
-          # pattern = new Regexp(entry.pattern)
           if string.match(entry.pattern)
             robot.logger.info "Matched /#{entry.pattern}/ (by #{entry.author}), so not saying \"#{string}\""
             context.strings = []
