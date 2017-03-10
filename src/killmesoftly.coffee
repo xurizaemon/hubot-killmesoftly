@@ -1,36 +1,53 @@
 # Description:
-#   A message matching filter for what Hubot says.
-#   - Commands allow killfile management.
-#   - Response middleware intercepts messages and kills them.
+#   A message matching filter for Hubot's replies. Allows Hubot to *not* say
+#   things based on a set of patterns stored in robot.brain.
+#
+# Dependencies:
+#   None
+#
+# Configuration:
+#   None
+#
+# Commands:
+#   hubot killfile (on|off) - Activate/deactivate killfile.
+#   hubot killfile show - Print the list of patterns to exclude.
+#   hubot killfile add <pattern> - Add killfile entry
+#   hubot killfile remove <N> - Delete killfile entry (by index)
 #
 module.exports = (robot) ->
   # Load|create a kill file (array of filter regex patterns).
   robot.brain.data.killfile ?= {
+    # Interception is enabled or disabled.
     enabled: true,
-    entries: [
-      {
-        author: '@xurizaemon',
-        pattern: 'GET .* FRIENDS',
-        since: '2017-03-09',
-      }
-    ]
+    # Entries to intercept.
+    # [{pattern: '(what)', author: '(who)', since: '(time)'}]
+    entries: []
   }
 
   restore_killing = (status) ->
     @robot.brain.data.killfile.enabled = status
 
-  # Ensure killfile is disabled for 1s so we can output replies
-  # which contain killfile entries ... like showing the killfile!
+  # Ensure killfile is disabled briefly so we can output replies
+  # containing killfile entries ... eg the killfile!
   pause_killing = (status) ->
     if @robot.brain.data.killfile.enabled
+      @robot.brain.data.killfile.enabled = false
       setTimeout (@robot) ->
         restore_killing true
       , 1000
-      @robot.brain.data.killfile.enabled = false
+
+  # Show the current killfile.
+  # @hubot show killfile
+  robot.respond /killfile show/, (res) ->
+    pause_killing()
+    message = 'Current killfile:\n'
+    for value, index in robot.brain.data.killfile.entries
+      message += "#{index}: /#{value.pattern}/ (by #{value.author})\n"
+    res.reply message
 
   # Add an item to killfile.
   # @hubot kill: GET .* FRIENDS
-  robot.respond /kill: (.*)/i, (res) ->
+  robot.respond /killfile add (.*)/i, (res) ->
     pause_killing()
     res.match[1] = res.match[1]?.trim()
     # Do not add empty entries.
@@ -47,18 +64,9 @@ module.exports = (robot) ->
     }
     res.reply "OK #{res.envelope.user.name}, I will not say things matching /#{res.match[1]}/."
 
-  # Show the current killfile.
-  # @hubot show killfile
-  robot.respond /show killfile/, (res) ->
-    pause_killing()
-    message = 'Current killfile:\n'
-    for value, index in robot.brain.data.killfile.entries
-      message += "#{index}: /#{value.pattern}/ (by #{value.author})\n"
-    res.reply message
-
   # Remove an item from the killfile.
   # @hubot delete kill 3
-  robot.respond /delete kill (.*)/, (res) ->
+  robot.respond /killfile remove (.*)/, (res) ->
     pause_killing()
     if robot.brain.data.killfile.entries[res.match[1]]?
       entry = robot.brain.data.killfile.entries[res.match[1]]
