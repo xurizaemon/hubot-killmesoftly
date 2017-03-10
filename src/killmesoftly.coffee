@@ -62,7 +62,7 @@ module.exports = (robot) ->
       pattern: res.match[1],
       since: new Date().toISOString()
     }
-    res.reply "OK #{res.envelope.user.name}, I will not say things matching /#{res.match[1]}/."
+    res.reply "OK, I will not say things matching /#{res.match[1]}/."
 
   # Remove an item from the killfile.
   # @hubot delete kill 3
