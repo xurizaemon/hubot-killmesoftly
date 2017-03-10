@@ -1,0 +1,16 @@
+{
+  "name": "hubot-killmesoftly",
+  "version": "0.0.1",
+  "description": "A shared killfile for things Hubot should (not) say.",
+  "main": "src/killmesoftly.coffee",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "hubot",
+    "killfile",
+    "spamfilter"
+  ],
+  "author": "Chris Burgess <chris@giantrobot.co.nz>",
+  "license": "MIT"
+}
