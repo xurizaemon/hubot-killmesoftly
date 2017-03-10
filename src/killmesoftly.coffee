@@ -85,10 +85,10 @@ module.exports = (robot) ->
   # Intercept things @hubot ought not to say.
   robot.responseMiddleware (context, next, done) ->
     return unless context.plaintext?
-    for string in context.strings
-      if robot.brain.data.killfile.enabled
+    if robot.brain.data.killfile.enabled
+      for string in context.strings
         for entry in robot.brain.data.killfile.entries
           if string.match(entry.pattern)
             robot.logger.info "Matched /#{entry.pattern}/ (by #{entry.author}), so not saying \"#{string}\""
             context.strings = []
-    next()
+      next()
