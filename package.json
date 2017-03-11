@@ -1,7 +1,7 @@
 {
   "name": "hubot-killmesoftly",
   "description": "A shared killfile for things Hubot should (not) say.",
-  "version": null,
+  "version": "0.0.3",
   "author": "Chris Burgess <chris@giantrobot.co.nz>",
   "license": "MIT",
   "keywords": [
