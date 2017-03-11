@@ -1,7 +1,7 @@
 {
   "name": "hubot-refrain",
   "description": "A shared killfile for things Hubot should (not) say.",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": "Chris Burgess <chris@giantrobot.co.nz>",
   "license": "MIT",
   "keywords": [
