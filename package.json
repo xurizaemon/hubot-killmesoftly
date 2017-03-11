@@ -1,7 +1,7 @@
 {
   "name": "hubot-refrain",
   "description": "A shared killfile for things Hubot should (not) say.",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "Chris Burgess <chris@giantrobot.co.nz>",
   "license": "MIT",
   "keywords": [
@@ -22,9 +22,11 @@
   "devDependencies": {
     "chai": "*",
     "grunt": "^1.0.1",
+    "grunt-bump": "^0.8.0",
     "grunt-contrib-watch": "~0.5.3",
     "grunt-mocha-test": "~0.7.0",
     "grunt-release": "~0.6.0",
+    "grunt-version": "^1.1.1",
     "hubot-test-helper": "^1.5.1",
     "matchdep": "~0.1.2",
     "mocha": "*",
