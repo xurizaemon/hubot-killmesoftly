@@ -6,10 +6,6 @@ Perhaps you'd like to prevent Hubot being trained to swear, or you use `[hubot-t
 
 Uses `robot.brain` to persist killfile entries.
 
-## Naming
-
-Just [Killing Me Softly - Roberta Flack](https://www.youtube.com/watch?v=Dx1XtKbEtfE). It felt like a hubot-ish name on a Friday night.
-
 ## Configuration
 
 All configuration is done using commands.

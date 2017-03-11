@@ -1,5 +1,5 @@
 {
-  "name": "hubot-killmesoftly",
+  "name": "hubot-refrain",
   "description": "A shared killfile for things Hubot should (not) say.",
   "version": "0.0.3",
   "author": "Chris Burgess <chris@giantrobot.co.nz>",
@@ -11,10 +11,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/xurizaemon/hubot-killmesoftly.git"
+    "url": "git+ssh://git@github.com/xurizaemon/hubot-refrain.git"
   },
   "bugs": {
-    "url": "https://github.com/xurizaemon/hubot-killmesoftly/issues"
+    "url": "https://github.com/xurizaemon/hubot-refrain/issues"
   },
   "dependencies": {
     "coffee-script": "~1.6"
