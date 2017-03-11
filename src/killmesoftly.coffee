@@ -14,6 +14,8 @@
 #   hubot killfile add <pattern> - Add killfile entry
 #   hubot killfile remove <N> - Delete killfile entry (by index)
 #
+# Author:
+#   Chris Burgess <chris@giantrobot.co.nz>
 module.exports = (robot) ->
   # Load|create a kill file (array of filter regex patterns).
   robot.brain.data.killfile ?= {

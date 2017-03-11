@@ -1,20 +1,38 @@
 {
   "name": "hubot-killmesoftly",
-  "version": "0.0.1",
   "description": "A shared killfile for things Hubot should (not) say.",
-  "main": "src/killmesoftly.coffee",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/xurizaemon/hubot-killmesoftly.git"
-  },
+  "version": "0.0.1",
+  "author": "Chris Burgess <chris@giantrobot.co.nz>",
+  "license": "MIT",
   "keywords": [
     "hubot",
     "killfile",
     "spamfilter"
   ],
-  "author": "Chris Burgess <chris@giantrobot.co.nz>",
-  "license": "MIT"
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/xurizaemon/hubot-killmesoftly.git"
+  },
+  "bugs": {
+    "url": "https://github.com/xurizaemon/hubot-killmesoftly/issues"
+  },
+  "dependencies": {
+    "coffee-script": "~1.6"
+  },
+  "devDependencies": {
+    "chai": "*",
+    "grunt": "^1.0.1",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-mocha-test": "~0.7.0",
+    "grunt-release": "~0.6.0",
+    "hubot-test-helper": "^1.5.1",
+    "matchdep": "~0.1.2",
+    "mocha": "*",
+    "sinon": "*",
+    "sinon-chai": "*"
+  },
+  "main": "index.coffee",
+  "scripts": {
+    "test": "grunt test"
+  }
 }
