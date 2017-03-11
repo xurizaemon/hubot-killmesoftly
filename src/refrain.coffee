@@ -17,11 +17,6 @@
 # Author:
 #   Chris Burgess <chris@giantrobot.co.nz>
 module.exports = (robot) ->
-  # Handle rename.
-  if robot.brain.data.killfile && !robot.brain.data.refrain
-    robot.logger.info "Moving killfile to refrain."
-    robot.brain.data.refrain = robot.brain.data.killfile
-
   # Load|create a kill file (array of filter regex patterns).
   robot.brain.data.refrain ?= {
     # Interception is enabled or disabled.
