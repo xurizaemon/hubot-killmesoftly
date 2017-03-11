@@ -47,9 +47,14 @@ module.exports = (robot) ->
   # @hubot show refrain
   robot.respond /refrain show/, (res) ->
     pause_refrain()
-    message = 'Current refrain:\n'
-    for value, index in robot.brain.data.refrain.entries
-      message += "#{index}: /#{value.pattern}/ (by #{value.author})\n"
+    if robot.brain.data.refrain.entries.length > 0
+      message = []
+      message.push 'Current refrain entries:'
+      for value, index in robot.brain.data.refrain.entries
+        message.push " #{index}: /#{value.pattern}/ (by #{value.author})"
+      message = message.join '\n'
+    else
+      message = 'No current refrain entries.'
     res.reply message
 
   # Add an item to refrain.
