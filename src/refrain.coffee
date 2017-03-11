@@ -98,4 +98,4 @@ module.exports = (robot) ->
           if string.match(entry.pattern)
             robot.logger.info "Matched /#{entry.pattern}/ (by #{entry.author}), so not saying \"#{string}\""
             context.strings = []
-      next()
+    next()
